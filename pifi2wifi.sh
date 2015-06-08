@@ -131,7 +131,7 @@ EOF
 
 sudo sed -i: 's|^#DAEMON_CONF=""|DAEMON_CONF="/etc/hostapd/hostapd.conf"|g' /etc/default/hostapd
 
-#ENABLE FORWARDING AND CONFIGURE IPTABLESa
+#ENABLE FORWARDING AND CONFIGURE IPTABLES
 
 sudo sed -i: 's/^#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
