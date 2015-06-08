@@ -1,5 +1,5 @@
 # pifi2wifi
-Expose 802.1x (e.g. eduroam) connection via second wifi (i.e. access point).
+Share 802.1x (e.g. eduroam) connection via second wifi card (i.e. as an access point).
   - Includes recompiled hostapd for use with rtl8188cus usb wifi cards (optional).
 
 N.B. this script is for my own personal records. It configures a Raspberry Pi to connect to an 802.1x network and then exposes this via an access point. This is a proof of principle and you are very likely break your universities terms and conditions if you do this. The script needs configuring to work (see XXXs) and is run at your own risk.
