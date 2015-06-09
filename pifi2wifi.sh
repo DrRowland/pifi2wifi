@@ -116,14 +116,14 @@ cat <<EOF | sudo tee -a /etc/hostapd/hostapd.conf > /dev/null
 interface=wlan0
 #driver=nl80211
 driver=rtl871xdrv
-ssid=MyPi
+ssid=XXX Your new AP ssid XXX
 hw_mode=g
 channel=6
 macaddr_acl=0
 auth_algs=1
 ignore_broadcast_ssid=0
 wpa=1
-wpa_passphrase=raspberry
+wpa_passphrase=XXX Your new AP's passphrase XXX
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP CCMP
 rsn_pairwise=TKIP CCMP
