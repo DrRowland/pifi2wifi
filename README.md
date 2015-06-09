@@ -1,3 +1,5 @@
+Note to self - changes for iPhone not sure about those, only worked when iPhone not plugged in to iMac!
+
 # pifi2wifi
 Share 802.1x (e.g. eduroam) connection via second wifi card (i.e. as an access point).
   - Includes recompiled hostapd for use with rtl8188cus usb wifi cards (optional).
