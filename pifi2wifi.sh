@@ -1,11 +1,8 @@
 #!/bin/bash -e
 
 #Created for 2015-05-05-raspbian-wheezy.img
-#Reference:
-#http://www.maketecheasier.com/set-up-raspberry-pi-as-wireless-access-point/
-#http://www.daveconroy.com/turn-your-raspberry-pi-into-a-wifi-hotspot-with-edimax-nano-usb-ew-7811un-rtl8188cus-chipset/
 
-#Install raspbian and boot pi with ethernet and two rtl8188cus wifi cards
+#Install raspbian and boot pi with ethernet connect to AP (as router) and one rtl8188cus wifi card
 
 #REMOVE JUNK AND UPDATE
 
