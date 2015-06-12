@@ -50,22 +50,15 @@ XXX your institution's eduroam certificate XXX
 -----END CERTIFICATE-----
 EOF
 
-#CONFIGURE THE TWO WIFI NETWORKS (LEAVING WIRED FOR DEBUGGING)
+#CONFIGURE ONE WIFI NETWORKS AND WIRED TO CONNECT TO ACCESS POINT
 
 sudo mv /etc/network/interfaces /etc/network/interfaces.bak
 cat <<EOF | sudo tee /etc/network/interfaces > /dev/null
 auto lo
 iface lo inet loopback
 
-auto eth0
 allow-hotplug eth0
-iface eth0 inet manual
-
-#auto wlan0
-allow-hotplug wlan0
-#iface wlan0 inet manual
-#wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
-iface wlan0 inet static
+iface eth0 inet static
 address 192.168.42.1
 netmask 255.255.255.0
 
@@ -75,7 +68,6 @@ iface wlan1 inet manual
 wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 pre-up iptables-restore < /etc/iptables.ipv4.nat
-
 EOF
 
 #INSTALL THE DHCP SERVER AND CONFIGURE IT
@@ -98,51 +90,15 @@ option domain-name-servers 8.8.8.8, 8.8.4.4;
 }
 EOF
 
-sudo sed -i: 's/^INTERFACES=""/INTERFACES="wlan0"/g' /etc/default/isc-dhcp-server
-
-#INSTALL HOSTAPD AND REPLACE WITH ALTERNATIVE FOR rtl8188cus
-
-sudo apt-get install hostapd
-
-wget http://www.daveconroy.com/wp3/wp-content/uploads/2013/07/hostapd.zip
-unzip hostapd.zip 
-sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.bak
-sudo mv hostapd /usr/sbin/hostapd.edimax 
-sudo ln -sf /usr/sbin/hostapd.edimax /usr/sbin/hostapd 
-sudo chown root:root /usr/sbin/hostapd 
-sudo chmod 755 /usr/sbin/hostapd
-
-cat <<EOF | sudo tee -a /etc/hostapd/hostapd.conf > /dev/null
-interface=wlan0
-#driver=nl80211
-driver=rtl871xdrv
-ssid=XXX Your new AP ssid XXX
-hw_mode=g
-channel=6
-macaddr_acl=0
-auth_algs=1
-ignore_broadcast_ssid=0
-wpa=1
-wpa_passphrase=XXX Your new AP's passphrase XXX
-wpa_key_mgmt=WPA-PSK
-wpa_pairwise=TKIP CCMP
-rsn_pairwise=TKIP CCMP
-wpa_ptk_rekey=600
-#ieee80211n=0
-ieee8021x=0
-eap_server=0
-EOF
-
-sudo sed -i: 's|^#DAEMON_CONF=""|DAEMON_CONF="/etc/hostapd/hostapd.conf"|g' /etc/default/hostapd
+sudo sed -i: 's/^INTERFACES=""/INTERFACES="eth0"/g' /etc/default/isc-dhcp-server
 
 #ENABLE FORWARDING AND CONFIGURE IPTABLES
 
 sudo sed -i: 's/^#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
-sudo iptables -t nat -A POSTROUTING -o wlan1 -j MASQUERADE
-sudo iptables -A FORWARD -i wlan1 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-sudo iptables -A FORWARD -i wlan0 -o wlan1 -j ACCEPT
+sudo iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
+sudo iptables -A FORWARD -i wlan0 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i eth0 -o wlan0 -j ACCEPT
 sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
 
 echo Power off, unplug ethernet cable, cross your fingers, power on.
-
