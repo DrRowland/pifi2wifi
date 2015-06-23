@@ -98,4 +98,4 @@ sudo iptables -A FORWARD -i wlan0 -o eth0 -m state --state RELATED,ESTABLISHED -
 sudo iptables -A FORWARD -i eth0 -o wlan0 -j ACCEPT
 sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
 
-echo Power off, unplug ethernet cable, cross your fingers, power on.
+echo Power off, cross your fingers, power on.
